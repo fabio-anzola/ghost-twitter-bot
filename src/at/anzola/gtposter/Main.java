@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -33,6 +34,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException, SQLException {
         //java -jar ghost-twitter-poster.jar BASE_URL APIKEY DBHOST:PORT DBNAME UNAME PASSWD
+
+        System.out.println("Starting script at " + LocalDateTime.now().toString());
 
         getOptions(args);
 
