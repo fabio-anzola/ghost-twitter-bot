@@ -1,8 +1,8 @@
 package at.anzola.gtposter;
 
-import com.google.gson.Gson;
 import at.anzola.response.Post;
 import at.anzola.response.PostBody;
+import com.google.gson.Gson;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import org.apache.commons.io.FileUtils;
@@ -57,25 +57,23 @@ public class Main {
         PASSWORD = args[5];
     }
 
-    public static void runScript() throws InterruptedException, SQLException, IOException {
+    public static void runScript() throws SQLException, IOException {
         PostBody pb;
-        while (true) {
-            HttpResponse<String> response = Unirest.get(BASE_URL + "/ghost/api/v2/content/posts/?key=" + API_KEY + "&limit=all").asString();
+        HttpResponse<String> response = Unirest.get(BASE_URL + "/ghost/api/v2/content/posts/?key=" + API_KEY + "&limit=all").asString();
 
-            Gson gson = new Gson();
+        Gson gson = new Gson();
 
-            pb = gson.fromJson(String.valueOf(response.getBody()), PostBody.class);
+        pb = gson.fromJson(String.valueOf(response.getBody()), PostBody.class);
 
-            for (int i = pb.posts.length - 1; i >= 0; i--) {
-                Post post = pb.posts[i];
-                if (!Bot_DB.searchValue(post.getId())) {
-                    tweetImage("We released a new Blog: " + post.getTitle() + "\n Check it out at " + post.getUrl() + "!", post.getFeature_image());
-                    System.out.println("Tweeting " + post.getUrl());
-                    Bot_DB.putValue(post.getId());
-                }
+        for (int i = pb.posts.length - 1; i >= 0; i--) {
+            Post post = pb.posts[i];
+            if (!Bot_DB.searchValue(post.getId())) {
+                tweetImage("We released a new Blog: " + post.getTitle() + "\n Check it out at " + post.getUrl() + "!", post.getFeature_image());
+                System.out.println("Tweeting " + post.getUrl());
+                Bot_DB.putValue(post.getId());
             }
-            Thread.sleep(60000);
         }
+
     }
 
 
@@ -86,7 +84,7 @@ public class Main {
         image.delete();
     }
 
-    public static void devTweet() throws IOException {
+    public static void devTweet() {
         twitter.updateStatus("Bot currently in development... " + System.nanoTime());
     }
 
